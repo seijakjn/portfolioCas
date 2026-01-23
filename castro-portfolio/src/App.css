@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0f172a;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* centers horizontally */
+  justify-content: center;  /* centers vertically */
+  min-height: 100vh;        /* makes the container full viewport height */
+}
+
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 4rem 1rem 3rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+  color: #cbd5f5;
+}
+
+.socials {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.socials a {
+  text-decoration: none;
+  color: #0f172a;
+  background: #38bdf8;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.socials a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+}
+
+/* Sections */
+section {
+  margin-top: 3.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+section h2 {
+  text-align: center;
+}
+
+.about p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #d1d5db;
+  text-align: center;
+}
+
+
+/* Projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+
+.project-card {
+  background: #020617;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #1e293b;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: #38bdf8;
+}
+
+.project-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.project-card p {
+  color: #cbd5f5;
+  font-size: 0.95rem;
+}
+
+/* Project links */
+.project-links {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.project-links a {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.project-links a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
