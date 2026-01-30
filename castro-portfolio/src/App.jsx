@@ -19,15 +19,31 @@ function App() {
     if (FORMSPREE) {
       try {
         setStatus("sending");
+        // Use URL-encoded body which Formspree accepts reliably
+        const params = new URLSearchParams();
+        params.append("name", form.name);
+        params.append("email", form.email);
+        params.append("message", form.message);
+
         const res = await fetch(FORMSPREE, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             Accept: "application/json",
           },
-          body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+          body: params.toString(),
         });
-        const data = await res.json().catch(() => ({}));
+
+        const contentType = res.headers.get("content-type") || "";
+        let data = {};
+        if (contentType.includes("application/json")) {
+          data = await res.json().catch(() => ({}));
+        } else {
+          data = { statusText: await res.text().catch(() => "") };
+        }
+
+        console.log("Formspree response status", res.status, data);
+
         if (res.ok) {
           setStatus("success");
           setTimeout(() => {
@@ -37,11 +53,11 @@ function App() {
           }, 900);
         } else {
           setStatus("error");
-          console.error("Formspree error", data);
+          console.error("Formspree returned error", res.status, data);
         }
       } catch (err) {
         setStatus("error");
-        console.error(err);
+        console.error("Network or other error sending to Formspree:", err);
       }
     } else {
       // fallback to mailto (opens user's mail client)
@@ -58,11 +74,21 @@ function App() {
     <div className="app">
       {/* Hero Section */}
       <section className="hero">
+        <a href="https://github.com/seijakjn" target="_blank" rel="noreferrer" aria-label="View GitHub profile">
+          <img
+            src="https://github.com/seijakjn.png"
+            alt="Joannes Castro Jr. — GitHub avatar"
+            className="avatar"
+            loading="lazy"
+            width="160"
+            height="160"
+          />
+        </a>
         <h1>Joannes Castro Jr.</h1>
         <p className="subtitle">University Student • Aspiring Developer</p>
 
         <div className="socials">
-          <a href="https://github.com/yourusername" target="_blank" rel="noreferrer">
+          <a href="https://github.com/seijakjn" target="_blank" rel="noreferrer">
             GitHub
           </a>
           <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noreferrer">
@@ -85,32 +111,45 @@ function App() {
         <h2>Projects</h2>
 
         <div className="project-grid">
-          <div className="project-card">
-            <h3>React Portfolio</h3>
-            <p>This personal portfolio built with React and Vite.</p>
-            <div className="project-links">
-              <a href="#">Live Demo</a>
-              <a href="#">Source Code</a>
+          {[
+            {
+              title: "Portfolio App",
+              description: "Personal portfolio built with React and Vite.",
+              repo: "https://github.com/seijakjn/portfolioCas",
+            },
+            {
+              title: "Laravel Project",
+              description: "Laravel project — server-side app and exercises.",
+              repo: "https://github.com/seijakjn/castroLaravel",
+            },
+            {
+              title: "SOAP Project",
+              description: "Various development projects and exercises.",
+              repo: "https://github.com/seijakjn/development",
+            },
+          ].map((p) => (
+            <div className="project-card" key={p.repo}>
+              <h3>{p.title.replace(/^[a-z]/, (c) => c.toUpperCase())}</h3>
+              <p>{p.description}</p>
+              <div className="project-links">
+                <a href={p.repo} target="_blank" rel="noreferrer">
+                  Source Code
+                </a>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          <div className="project-card">
-            <h3>Vite Practice App</h3>
-            <p>A small app I built to practice modern frontend tooling.</p>
-            <div className="project-links">
-              <a href="#">Live Demo</a>
-              <a href="#">Source Code</a>
-            </div>
-          </div>
-
-          <div className="project-card">
-            <h3>School Projects</h3>
-            <p>Various projects and exercises from university coursework.</p>
-            <div className="project-links">
-              <a href="#">Live Demo</a>
-              <a href="#">Source Code</a>
-            </div>
-          </div>
+        <div style={{ marginTop: 12, textAlign: "center" }}>
+          <a
+            className="socials-link"
+            href="https://github.com/seijakjn"
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: "#38bdf8", fontWeight: 700 }}
+          >
+            View all projects on GitHub
+          </a>
         </div>
       </section>
 
@@ -169,12 +208,21 @@ function App() {
                 />
               </label>
 
-              <div className="actions">
-                <button type="button" onClick={() => setIsModalOpen(false)}>
-                  Cancel
-                </button>
-                <button type="submit">Send</button>
-              </div>
+                <div className="actions">
+                  <button type="button" onClick={() => setIsModalOpen(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={status === "sending"}>
+                    {status === "sending" ? "Sending..." : "Send"}
+                  </button>
+                </div>
+
+                <div style={{ marginTop: 8, minHeight: 20 }}>
+                  {status === "success" && <span style={{ color: "#10b981" }}>Message sent ✓</span>}
+                  {status === "error" && (
+                    <span style={{ color: "#ef4444" }}>Failed to send — check console/network.</span>
+                  )}
+                </div>
             </form>
           </div>
         </div>
