@@ -10,16 +10,48 @@ function App() {
     setForm((s) => ({ ...s, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  const FORMSPREE = import.meta.env.VITE_FORMSPREE_ENDPOINT || null;
+
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    const recipient = "joannes.castro@urios.edu.ph";
-    const subject = `Contact from ${form.name || "Website"}`;
-    const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
-    const mailto = `mailto:${recipient}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setIsModalOpen(false);
+    if (FORMSPREE) {
+      try {
+        setStatus("sending");
+        const res = await fetch(FORMSPREE, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          setStatus("success");
+          setTimeout(() => {
+            setIsModalOpen(false);
+            setForm({ name: "", email: "", message: "" });
+            setStatus("idle");
+          }, 900);
+        } else {
+          setStatus("error");
+          console.error("Formspree error", data);
+        }
+      } catch (err) {
+        setStatus("error");
+        console.error(err);
+      }
+    } else {
+      // fallback to mailto (opens user's mail client)
+      const recipient = "joannes.castro@urios.edu.ph";
+      const subject = `Contact from ${form.name || "Website"}`;
+      const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
+      const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+      setIsModalOpen(false);
+    }
   }
 
   return (
