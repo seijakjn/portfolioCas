@@ -1,6 +1,27 @@
 import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm((s) => ({ ...s, [name]: value }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const recipient = "joannes.castro@urios.edu.ph";
+    const subject = `Contact from ${form.name || "Website"}`;
+    const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
+    const mailto = `mailto:${recipient}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+    setIsModalOpen(false);
+  }
+
   return (
     <div className="app">
       {/* Hero Section */}
@@ -12,11 +33,7 @@ function App() {
           <a href="https://github.com/yourusername" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <a
-            href="https://linkedin.com/in/yourusername"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noreferrer">
             LinkedIn
           </a>
         </div>
@@ -69,6 +86,67 @@ function App() {
       <footer className="footer">
         <p>© {new Date().getFullYear()} Joannes Castro Jr.</p>
       </footer>
+
+      {/* Floating Email Tab */}
+      <button className="email-tab" onClick={() => setIsModalOpen(true)}>
+        Email Me
+      </button>
+
+      {/* Modal contact form (mailto) */}
+      {isModalOpen && (
+        <div className="email-modal" role="dialog" aria-modal="true">
+          <div className="email-modal-content">
+            <button
+              className="email-close"
+              aria-label="Close contact form"
+              onClick={() => setIsModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3>Contact Me</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Name
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Your name"
+                />
+              </label>
+
+              <label>
+                Email
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                />
+              </label>
+
+              <label>
+                Message
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Write your message..."
+                />
+              </label>
+
+              <div className="actions">
+                <button type="button" onClick={() => setIsModalOpen(false)}>
+                  Cancel
+                </button>
+                <button type="submit">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

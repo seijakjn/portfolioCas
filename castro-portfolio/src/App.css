@@ -1,3 +1,4 @@
+/* Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,32 +8,27 @@
 body {
   background: #0f172a;
   color: #e5e7eb;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.6;
 }
 
+/* Main container: center everything */
 .app {
-  max-width: 1000px;
-  margin: 0 auto;
+  min-height: 100vh;              /* full viewport height */
+  display: flex;                   /* flex container */
+  flex-direction: column;          /* stack children vertically */
+  justify-content: center;         /* vertical centering */
+  align-items: center;             /* horizontal centering */
+  text-align: center;              /* center text */
   padding: 2rem 1.5rem 4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;      /* centers horizontally */
-  justify-content: center;  /* centers vertically */
-  min-height: 100vh;        /* makes the container full viewport height */
 }
 
-
-/* Hero */
+/* Hero Section */
 .hero {
-  text-align: center;
-  padding: 4rem 1rem 3rem;
   max-width: 800px;
   width: 100%;
-  margin: 0 auto;
+  margin-bottom: 3rem;
 }
-
 
 .hero h1 {
   font-size: 3rem;
@@ -70,35 +66,28 @@ body {
 
 /* Sections */
 section {
-  margin-top: 3.5rem;
   width: 100%;
   max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 3rem;
 }
 
-
 section h2 {
-  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .about p {
   max-width: 700px;
   margin: 0 auto;
   color: #d1d5db;
-  text-align: center;
 }
 
-
-/* Projects */
+/* Projects Grid */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-  margin-top: 1.5rem;
-  justify-content: center;
+  justify-items: center; /* center cards */
 }
-
 
 .project-card {
   background: #020617;
@@ -108,9 +97,7 @@ section h2 {
   transition: transform 0.15s ease, border-color 0.15s ease;
   max-width: 320px;
   width: 100%;
-  margin: 0 auto;
 }
-
 
 .project-card:hover {
   transform: translateY(-4px);
@@ -126,11 +113,11 @@ section h2 {
   font-size: 0.95rem;
 }
 
-/* Project links */
 .project-links {
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .project-links a {
@@ -145,8 +132,99 @@ section h2 {
 
 /* Footer */
 .footer {
-  margin-top: 4rem;
-  text-align: center;
   color: #94a3b8;
   font-size: 0.9rem;
+}
+
+/* Floating Email Tab */
+.email-tab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #38bdf8;
+  color: #0f172a;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px 0 0 8px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.18);
+  z-index: 1000;
+  border: none;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Modal */
+.email-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 23, 0.6);
+  z-index: 1001;
+}
+
+.email-modal-content {
+  position: relative;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 1.25rem;
+  border-radius: 12px;
+  width: 92%;
+  max-width: 480px;
+  border: 1px solid #1e293b;
+}
+
+.email-modal-content h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.email-modal-content label {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #cbd5f5;
+}
+
+.email-modal-content input,
+.email-modal-content textarea {
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #071126;
+  color: #e5e7eb;
+}
+
+.email-modal-content .actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.email-modal-content button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.email-modal-content button[type="submit"] {
+  background: #38bdf8;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.email-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
